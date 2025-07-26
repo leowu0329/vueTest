@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ case.yfcaseCaseNumber }} - 案件詳細
+{% endblock %}
+
+{% block content %}
+  <div class="row fade-in">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0"><i class="fas fa-file-alt me-2 text-primary"></i>案件詳細</h1>
+        <div class="btn-group" role="group">
+          {% if case.user == user or user.is_staff %}
+            <a href="{% url 'cases:case_update' case.pk %}" class="btn btn-warning"><i class="fas fa-edit me-1"></i>編輯</a>
+            <a href="{% url 'cases:case_delete' case.pk %}" class="btn btn-danger"><i class="fas fa-trash me-1"></i>刪除</a>
+          {% endif %}
+          <a href="{% url 'cases:case_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>返回列表</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">案件資訊</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <table class="table table-borderless">
+                <tr>
+                  <th width="30%">案號：</th>
+                  <td>
+                    <strong>{{ case.yfcaseCaseNumber }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <th>所屬公司：</th>
+                  <td>{{ case.yfcaseCompany|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>案件狀態：</th>
+                  <td>
+                    {% if case.yfcaseCaseStatus == '在途' %}
+                      <span class="badge bg-warning">在途</span>
+                    {% elif case.yfcaseCaseStatus == '結案' %}
+                      <span class="badge bg-success">結案</span>
+                    {% else %}
+                      <span class="badge bg-light text-dark">{{ case.yfcaseCaseStatus|default:'未設定' }}</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th>區域負責人：</th>
+                  <td>{{ case.user.get_full_name|default:case.user.email }}</td>
+                </tr>
+                <tr>
+                  <th>建立時間：</th>
+                  <td>{{ case.yfcaseTimestamp|date:'Y-m-d H:i:s' }}</td>
+                </tr>
+                <tr>
+                  <th>最後更新：</th>
+                  <td>{{ case.yfcaseUpdated|date:'Y-m-d H:i:s' }}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="table table-borderless">
+                <tr>
+                  <th width="30%">縣市：</th>
+                  <td>{{ case.yfcaseCity.name|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>鄉鎮區里：</th>
+                  <td>{{ case.yfcaseTownship.name|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>段號：</th>
+                  <td>{{ case.yfcaseBigSection|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>小段：</th>
+                  <td>{{ case.yfcaseSmallSection|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>村里：</th>
+                  <td>{{ case.yfcaseVillage|default:'未設定' }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <hr />
+
+          <h6>詳細地址</h6>
+          <div class="row">
+            <div class="col-md-6">
+              <table class="table table-borderless">
+                <tr>
+                  <th width="30%">街路：</th>
+                  <td>{{ case.yfcaseStreet|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>段：</th>
+                  <td>{{ case.yfcaseSection|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>巷：</th>
+                  <td>{{ case.yfcaseLane|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>弄：</th>
+                  <td>{{ case.yfcaseAlley|default:'未設定' }}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="table table-borderless">
+                <tr>
+                  <th width="30%">號：</th>
+                  <td>{{ case.yfcaseNumber|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>樓層：</th>
+                  <td>{{ case.yfcaseFloor|default:'未設定' }}</td>
+                </tr>
+                <tr>
+                  <th>鄰：</th>
+                  <td>{{ case.yfcaseNeighbor|default:'未設定' }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          {% if case.yfcaseCity or case.yfcaseStreet %}
+            <div class="mt-3">
+              <strong>完整地址：</strong>
+              <span class="text-muted">{{ case.get_full_address }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

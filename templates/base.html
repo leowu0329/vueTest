@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        案件管理系統
+      {% endblock %}
+    </title>
+
+    <!-- Bootstrap 5.3.7 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome 6.4.0 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+    <style>
+      :root {
+        --primary-color: #0d6efd;
+        --secondary-color: #6c757d;
+        --success-color: #198754;
+        --warning-color: #ffc107;
+        --danger-color: #dc3545;
+        --info-color: #0dcaf0;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+      }
+      
+      body {
+        font-family: 'Noto Sans TC', 'Roboto', sans-serif;
+        background-color: #f8f9fa;
+      }
+      
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+      }
+      
+      .navbar {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        border-radius: 0.75rem;
+      }
+      
+      .card-header {
+        background: linear-gradient(135deg, var(--primary-color), #0056b3);
+        color: white;
+        border-radius: 0.75rem 0.75rem 0 0 !important;
+        font-weight: 500;
+      }
+      
+      .table {
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      
+      .table th {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        color: var(--dark-color);
+      }
+      
+      .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+      }
+      
+      .search-form {
+        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        padding: 2rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        border: 1px solid #e9ecef;
+      }
+      
+      .search-form .form-label {
+        font-weight: 500;
+        color: var(--dark-color);
+      }
+      
+      .btn {
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), #0056b3);
+        border: none;
+      }
+      
+      .btn-success {
+        background: linear-gradient(135deg, var(--success-color), #146c43);
+        border: none;
+      }
+      
+      .btn-warning {
+        background: linear-gradient(135deg, var(--warning-color), #e0a800);
+        border: none;
+        color: #000;
+      }
+      
+      .btn-danger {
+        background: linear-gradient(135deg, var(--danger-color), #b02a37);
+        border: none;
+      }
+      
+      .btn-secondary {
+        background: linear-gradient(135deg, var(--secondary-color), #5c636a);
+        border: none;
+      }
+      
+      .pagination {
+        justify-content: center;
+      }
+      
+      .page-link {
+        border-radius: 0.375rem;
+        margin: 0 0.125rem;
+        border: 1px solid #dee2e6;
+        color: var(--primary-color);
+        font-weight: 500;
+      }
+      
+      .page-link:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+      }
+      
+      .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--primary-color), #0056b3);
+        border-color: var(--primary-color);
+      }
+      
+      .badge {
+        font-weight: 500;
+        padding: 0.5em 0.75em;
+        border-radius: 0.375rem;
+      }
+      
+      .alert {
+        border: none;
+        border-radius: 0.75rem;
+        font-weight: 500;
+      }
+      
+      .form-control,
+      .form-select {
+        border-radius: 0.5rem;
+        border: 1px solid #ced4da;
+        transition: all 0.2s ease;
+      }
+      
+      .form-control:focus,
+      .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+      }
+      
+      .btn-group-sm > .btn,
+      .btn-sm {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        border-radius: 0.375rem;
+      }
+      
+      .main-content {
+        min-height: calc(100vh - 200px);
+      }
+      
+      .footer {
+        background: linear-gradient(135deg, var(--dark-color), #343a40);
+        color: white;
+        padding: 2rem 0;
+        margin-top: 3rem;
+      }
+      
+      /* 動畫效果 */
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      /* 響應式設計 */
+      @media (max-width: 768px) {
+        .search-form {
+          padding: 1rem;
+        }
+      
+        .navbar-brand {
+          font-size: 1.25rem;
+        }
+      }
+    </style>
+    {% block extra_css %}
+
+    {% endblock %}
+  </head>
+  <body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'cases:case_list' %}"><i class="fas fa-building me-2"></i>揚富開發</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'cases:case_list' %}">案件清單</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'cases:case_create' %}">新建案件</a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"><i class="fas fa-user me-1"></i>{{ user.get_full_name|default:user.email }}</a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="{% url 'account_logout' %}">登出</a>
+                  </li>
+                </ul>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_login' %}">登入</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 主要內容 -->
+    <main class="container mt-4">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" id="alert-{{ forloop.counter }}">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% block content %}
+
+      {% endblock %}
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="footer text-center">
+      <div class="container">
+        <p class="mb-0">&copy; 2024 揚富開發. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap 5.3.7 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery 3.7.1 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        // 自動關閉成功訊息
+        $('.alert-success').each(function (index) {
+          var $alert = $(this)
+          setTimeout(function () {
+            $alert.fadeOut('slow', function () {
+              $(this).remove()
+            })
+          }, 3000) // 3秒後自動關閉
+        })
+      })
+    </script>
+
+    {% block extra_js %}
+
+    {% endblock %}
+  </body>
+</html>

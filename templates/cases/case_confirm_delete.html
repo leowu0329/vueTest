@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  刪除案件 - 案件管理系統
+{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center fade-in">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-danger text-white">
+          <h5 class="card-title mb-0"><i class="fas fa-exclamation-triangle me-2"></i>確認刪除</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text">您確定要刪除以下案件嗎？</p>
+
+          <div class="alert alert-warning">
+            <strong>案號：</strong>{{ case.yfcaseCaseNumber }}<br />
+            <strong>地址：</strong>{{ case.get_full_address|default:'地址未設定' }}<br />
+            <strong>負責人：</strong>{{ case.user.get_full_name|default:case.user.email }}
+          </div>
+
+          <p class="text-danger">
+            <i class="fas fa-info-circle me-1"></i>
+            此操作無法復原，請謹慎操作！
+          </p>
+
+          <form method="post">
+            {% csrf_token %}
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-danger"><i class="fas fa-trash me-1"></i>確認刪除</button>
+              <a href="{% url 'cases:case_detail' case.pk %}" class="btn btn-secondary"><i class="fas fa-times me-1"></i>取消</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

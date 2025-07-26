@@ -1,0 +1,399 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  案件清單 - 案件管理系統
+{% endblock %}
+
+{% block content %}
+  <div class="row fade-in">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0"><i class="fas fa-list me-2 text-primary"></i>案件清單</h1>
+        <a href="{% url 'cases:case_create' %}" class="btn btn-primary btn-lg"><i class="fas fa-plus me-1"></i>新建案件</a>
+      </div>
+
+      <!-- 搜尋表單 -->
+      <div class="search-form">
+        <form method="get" class="row g-3">
+          <div class="col-md-3">{{ form.search.label_tag }}
+            {{ form.search }}</div>
+          <div class="col-md-2">{{ form.status.label_tag }}
+            {{ form.status }}</div>
+          <div class="col-md-2">{{ form.city.label_tag }}
+            {{ form.city }}</div>
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search me-1"></i>搜尋</button>
+            <a href="{% url 'cases:case_list' %}" class="btn btn-secondary"><i class="fas fa-undo me-1"></i>重置</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- 案件表格 -->
+      {% if page_obj %}
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>狀態</th>
+                <th>
+                  案號
+                  <a href="?{% if request.GET.search %}
+                      
+                      
+                      &search={{ request.GET.search }}
+                    {% endif %}{% if request.GET.status %}
+                      
+                      
+                      &status={{ request.GET.status }}
+                    {% endif %}{% if request.GET.city %}
+                      
+                      
+                      &city={{ request.GET.city }}
+                    {% endif %}{% if request.GET.sort_by == 'yfcaseCaseNumber' %}
+                      
+                      
+                      &sort_by=-yfcaseCaseNumber
+
+
+                    {% else %}
+                      
+                      
+                      &sort_by=yfcaseCaseNumber
+
+
+                    {% endif %}"
+                    class="btn btn-outline-secondary btn-sm ms-2"
+                    title="{% if request.GET.sort_by == 'yfcaseCaseNumber' %}
+                      
+                      
+                      案號降序
+
+
+                    {% else %}
+                      
+                      
+                      案號升序
+
+
+                    {% endif %}">
+                    <i class="fas fa-sort{% if request.GET.sort_by == 'yfcaseCaseNumber' %}
+                        
+                        
+                        -up
+
+
+                      {% elif request.GET.sort_by == '-yfcaseCaseNumber' %}
+                        
+                        
+                        -down
+
+
+                      {% else %}
+                        
+                        
+                        -down
+
+
+                      {% endif %}">
+
+                    </i>
+                  </a>
+                </th>
+                <th>負責人</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for case in page_obj %}
+                <tr>
+                  <td>
+                    {% if case.yfcaseCaseStatus == '在途' %}
+                      <span class="badge bg-warning">在途</span>
+                    {% elif case.yfcaseCaseStatus == '結案' %}
+                      <span class="badge bg-success">結案</span>
+                    {% else %}
+                      <span class="badge bg-light text-dark">{{ case.yfcaseCaseStatus|default:'未設定' }}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <strong>
+                      {% if case.yfcaseCompany == '揚富開發有限公司' %}
+                        <span class="badge bg-primary rounded-pill me-2" style="font-size: 0.8em;">揚</span>
+                      {% elif case.yfcaseCompany == '鉅鈦開發有限公司' %}
+                        <span class="badge bg-success rounded-pill me-2" style="font-size: 0.8em;">鉅</span>
+                      {% endif %}
+                      <a href="{% url 'cases:case_detail' case.pk %}" class="text-decoration-none text-primary">{{ case.yfcaseCaseNumber }}</a>
+                    </strong>
+                    {% if case.yfcaseCity or case.yfcaseStreet %}
+                      <br /><small class="text-muted">{{ case.get_full_address }}</small>
+                    {% else %}
+                      <br /><small class="text-muted">地址未設定</small>
+                    {% endif %}
+                  </td>
+                  <td>{{ case.user.get_full_name|default:case.user.email }}</td>
+                  <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                      {% if case.user == user or user.is_staff %}
+                        <a href="{% url 'cases:case_update' case.pk %}" class="btn btn-outline-warning" title="編輯"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'cases:case_delete' case.pk %}" class="btn btn-outline-danger" title="刪除"><i class="fas fa-trash"></i></a>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 分頁 -->
+        {% if page_obj.has_other_pages %}
+          <nav aria-label="案件分頁">
+            <ul class="pagination">
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link"
+                    href="?page=1{% if request.GET.search %}
+                      
+                      
+                      
+                      
+                      
+                      &search={{ request.GET.search }}
+                    {% endif %}{% if request.GET.status %}
+                      
+                      
+                      
+                      
+                      
+                      &status={{ request.GET.status }}
+                    {% endif %}{% if request.GET.city %}
+                      
+                      
+                      
+                      
+                      
+                      &city={{ request.GET.city }}
+                    {% endif %}{% if request.GET.sort_by %}
+                      
+                      
+                      
+                      
+                      
+                      &sort_by={{ request.GET.sort_by }}
+                    {% endif %}">
+                    <i class="fas fa-angle-double-left"></i>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link"
+                    href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}
+                      
+                      
+                      
+                      
+                      
+                      &search={{ request.GET.search }}
+                    {% endif %}{% if request.GET.status %}
+                      
+                      
+                      
+                      
+                      
+                      &status={{ request.GET.status }}
+                    {% endif %}{% if request.GET.city %}
+                      
+                      
+                      
+                      
+                      
+                      &city={{ request.GET.city }}
+                    {% endif %}{% if request.GET.sort_by %}
+                      
+                      
+                      
+                      
+                      
+                      &sort_by={{ request.GET.sort_by }}
+                    {% endif %}">
+                    <i class="fas fa-angle-left"></i>
+                  </a>
+                </li>
+              {% endif %}
+
+              {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                  <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                  </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                  <li class="page-item">
+                    <a class="page-link"
+                      href="?page={{ num }}{% if request.GET.search %}
+                        
+                        
+                        
+                        
+                        
+                        &search={{ request.GET.search }}
+                      {% endif %}{% if request.GET.status %}
+                        
+                        
+                        
+                        
+                        
+                        &status={{ request.GET.status }}
+                      {% endif %}{% if request.GET.city %}
+                        
+                        
+                        
+                        
+                        
+                        &city={{ request.GET.city }}
+                      {% endif %}{% if request.GET.sort_by %}
+                        
+                        
+                        
+                        
+                        
+                        &sort_by={{ request.GET.sort_by }}
+                      {% endif %}">
+                      {{ num }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link"
+                    href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}
+                      
+                      
+                      
+                      
+                      
+                      &search={{ request.GET.search }}
+                    {% endif %}{% if request.GET.status %}
+                      
+                      
+                      
+                      
+                      
+                      &status={{ request.GET.status }}
+                    {% endif %}{% if request.GET.city %}
+                      
+                      
+                      
+                      
+                      
+                      &city={{ request.GET.city }}
+                    {% endif %}{% if request.GET.sort_by %}
+                      
+                      
+                      
+                      
+                      
+                      &sort_by={{ request.GET.sort_by }}
+                    {% endif %}">
+                    <i class="fas fa-angle-right"></i>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link"
+                    href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}
+                      
+                      
+                      
+                      
+                      
+                      &search={{ request.GET.search }}
+                    {% endif %}{% if request.GET.status %}
+                      
+                      
+                      
+                      
+                      
+                      &status={{ request.GET.status }}
+                    {% endif %}{% if request.GET.city %}
+                      
+                      
+                      
+                      
+                      
+                      &city={{ request.GET.city }}
+                    {% endif %}{% if request.GET.sort_by %}
+                      
+                      
+                      
+                      
+                      
+                      &sort_by={{ request.GET.sort_by }}
+                    {% endif %}">
+                    <i class="fas fa-angle-double-right"></i>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+
+          <div class="text-center text-muted">第{{ page_obj.number }}頁 / 共{{ page_obj.paginator.num_pages }}頁</div>
+        {% endif %}
+      {% else %}
+        <div class="text-center py-5">
+          <div class="card">
+            <div class="card-body">
+              <i class="fas fa-search fa-4x text-muted mb-4"></i>
+              <h4 class="text-muted mb-3">沒有找到符合條件的案件</h4>
+              <p class="text-muted mb-4">請嘗試調整搜尋條件</p>
+              <a href="{% url 'cases:case_create' %}" class="btn btn-primary"><i class="fas fa-plus me-1"></i>建立第一個案件</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    $(document).ready(function () {
+      // 美化刪除按鈕
+      $('.btn-outline-danger').click(function (e) {
+        e.preventDefault()
+        var href = $(this).attr('href')
+        var caseNumber = $(this).closest('tr').find('td:nth-child(2) strong').text()
+    
+        Swal.fire({
+          title: '確認刪除',
+          text: '您確定要刪除案件「' + caseNumber + '」嗎？',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#dc3545',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: '確認刪除',
+          cancelButtonText: '取消',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = href
+          }
+        })
+      })
+    
+      // 美化搜尋按鈕
+      $('form').submit(function () {
+        var searchValue = $('#id_search').val()
+        if (searchValue.trim() !== '') {
+          Swal.fire({
+            title: '搜尋中...',
+            text: '正在搜尋「' + searchValue + '」',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading()
+            }
+          })
+        }
+      })
+    })
+  </script>
+{% endblock %}

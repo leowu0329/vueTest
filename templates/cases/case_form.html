@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ title }} - 案件管理系統
+{% endblock %}
+
+{% block content %}
+  <div class="row fade-in">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0"><i class="fas fa-edit me-2 text-primary"></i>{{ title }}</h1>
+        <a href="{% url 'cases:case_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>返回列表</a>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+
+            <!-- 基本資訊 -->
+            <h5 class="mb-3">基本資訊</h5>
+
+            <div class="mb-3">
+              <label for="{{ form.yfcaseCaseNumber.id_for_label }}" class="form-label">{{ form.yfcaseCaseNumber.label }} <span class="text-danger">*</span></label>
+              {{ form.yfcaseCaseNumber }}
+              {% if form.yfcaseCaseNumber.errors %}
+                <div class="text-danger">{{ form.yfcaseCaseNumber.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseCompany.id_for_label }}" class="form-label">{{ form.yfcaseCompany.label }} <span class="text-danger">*</span></label>
+                  {{ form.yfcaseCompany }}
+                  {% if form.yfcaseCompany.errors %}
+                    <div class="text-danger">{{ form.yfcaseCompany.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseCaseStatus.id_for_label }}" class="form-label">{{ form.yfcaseCaseStatus.label }} <span class="text-danger">*</span></label>
+                  {{ form.yfcaseCaseStatus }}
+                  {% if form.yfcaseCaseStatus.errors %}
+                    <div class="text-danger">{{ form.yfcaseCaseStatus.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <!-- 地址資訊 -->
+            <h5 class="mb-3">地址資訊</h5>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseCity.id_for_label }}" class="form-label">{{ form.yfcaseCity.label }} <span class="text-danger">*</span></label>
+                  {{ form.yfcaseCity }}
+                  {% if form.yfcaseCity.errors %}
+                    <div class="text-danger">{{ form.yfcaseCity.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseTownship.id_for_label }}" class="form-label">{{ form.yfcaseTownship.label }} <span class="text-danger">*</span></label>
+                  {{ form.yfcaseTownship }}
+                  {% if form.yfcaseTownship.errors %}
+                    <div class="text-danger">{{ form.yfcaseTownship.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseBigSection.id_for_label }}" class="form-label">{{ form.yfcaseBigSection.label }}</label>
+                  {{ form.yfcaseBigSection }}
+                  {% if form.yfcaseBigSection.errors %}
+                    <div class="text-danger">{{ form.yfcaseBigSection.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseSmallSection.id_for_label }}" class="form-label">{{ form.yfcaseSmallSection.label }}</label>
+                  {{ form.yfcaseSmallSection }}
+                  {% if form.yfcaseSmallSection.errors %}
+                    <div class="text-danger">{{ form.yfcaseSmallSection.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseVillage.id_for_label }}" class="form-label">{{ form.yfcaseVillage.label }}</label>
+                  {{ form.yfcaseVillage }}
+                  {% if form.yfcaseVillage.errors %}
+                    <div class="text-danger">{{ form.yfcaseVillage.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseNeighbor.id_for_label }}" class="form-label">{{ form.yfcaseNeighbor.label }}</label>
+                  {{ form.yfcaseNeighbor }}
+                  {% if form.yfcaseNeighbor.errors %}
+                    <div class="text-danger">{{ form.yfcaseNeighbor.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseStreet.id_for_label }}" class="form-label">{{ form.yfcaseStreet.label }}</label>
+                  {{ form.yfcaseStreet }}
+                  {% if form.yfcaseStreet.errors %}
+                    <div class="text-danger">{{ form.yfcaseStreet.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseSection.id_for_label }}" class="form-label">{{ form.yfcaseSection.label }}</label>
+                  {{ form.yfcaseSection }}
+                  {% if form.yfcaseSection.errors %}
+                    <div class="text-danger">{{ form.yfcaseSection.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseLane.id_for_label }}" class="form-label">{{ form.yfcaseLane.label }}</label>
+                  {{ form.yfcaseLane }}
+                  {% if form.yfcaseLane.errors %}
+                    <div class="text-danger">{{ form.yfcaseLane.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseAlley.id_for_label }}" class="form-label">{{ form.yfcaseAlley.label }}</label>
+                  {{ form.yfcaseAlley }}
+                  {% if form.yfcaseAlley.errors %}
+                    <div class="text-danger">{{ form.yfcaseAlley.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseNumber.id_for_label }}" class="form-label">{{ form.yfcaseNumber.label }} <span class="text-danger">*</span></label>
+                  {{ form.yfcaseNumber }}
+                  {% if form.yfcaseNumber.errors %}
+                    <div class="text-danger">{{ form.yfcaseNumber.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="{{ form.yfcaseFloor.id_for_label }}" class="form-label">{{ form.yfcaseFloor.label }}</label>
+                  {{ form.yfcaseFloor }}
+                  {% if form.yfcaseFloor.errors %}
+                    <div class="text-danger">{{ form.yfcaseFloor.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>儲存</button>
+              <a href="{% url 'cases:case_list' %}" class="btn btn-secondary"><i class="fas fa-times me-1"></i>取消</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    $(document).ready(function () {
+      // 縣市變更時更新鄉鎮區里選項
+      $('#id_yfcaseCity').change(function () {
+        var cityId = $(this).val()
+        var townshipSelect = $('#id_yfcaseTownship')
+    
+        townshipSelect.empty()
+        townshipSelect.append('<option value="">---------</option>')
+    
+        if (cityId) {
+          $.get('{% url "cases:get_townships" %}', { city_id: cityId }, function (data) {
+            $.each(data, function (index, township) {
+              townshipSelect.append('<option value="' + township.id + '">' + township.name + '</option>')
+            })
+          })
+        }
+      })
+    
+      // 美化表單提交
+      $('form').submit(function () {
+        var submitBtn = $('button[type="submit"]')
+        var originalText = submitBtn.html()
+    
+        submitBtn.html('<i class="fas fa-spinner fa-spin me-1"></i>儲存中...')
+        submitBtn.prop('disabled', true)
+    
+        // 如果表單驗證失敗，恢復按鈕狀態
+        setTimeout(function () {
+          if ($('.text-danger').length > 0) {
+            submitBtn.html(originalText)
+            submitBtn.prop('disabled', false)
+          }
+        }, 1000)
+      })
+    
+      // 美化取消按鈕
+      $('.btn-secondary').click(function (e) {
+        e.preventDefault()
+        var href = $(this).attr('href')
+    
+        Swal.fire({
+          title: '確認離開',
+          text: '您確定要離開嗎？未儲存的資料將會遺失。',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#6c757d',
+          cancelButtonColor: '#0d6efd',
+          confirmButtonText: '離開',
+          cancelButtonText: '繼續編輯',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = href
+          }
+        })
+      })
+    })
+  </script>
+{% endblock %}
