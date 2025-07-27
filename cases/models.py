@@ -21,13 +21,13 @@ class Township(models.Model):
         unique_together = ['name', 'city']
     
     def __str__(self):
-        return f"{self.city.name} - {self.name}"
+        return self.name
 
 class YfCase(models.Model):
     yfcaseCaseNumber = models.CharField(u'案號(*)', max_length=100)
     yfcaseCompany = models.CharField(u'所屬公司', max_length=50)
-    yfcaseCity = models.ForeignKey(City, verbose_name=u'縣市', on_delete=models.SET_NULL, null=True)
-    yfcaseTownship = models.ForeignKey(Township, verbose_name=u'鄉鎮區里', on_delete=models.SET_NULL, null=True)
+    yfcaseCity = models.ForeignKey(City, verbose_name=u'縣市', on_delete=models.SET_NULL, null=True, blank=True)
+    yfcaseTownship = models.ForeignKey(Township, verbose_name=u'鄉鎮區里', on_delete=models.SET_NULL, null=True, blank=True)
     yfcaseBigSection = models.CharField(u'段號', max_length=10, null=True, blank=True)
     yfcaseSmallSection = models.CharField(u'小段', max_length=10, null=True, blank=True)
     yfcaseVillage = models.CharField(u'村里', max_length=100, null=True, blank=True)

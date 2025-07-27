@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
   {{ title }} - 案件管理系統
@@ -57,8 +58,13 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="mb-3">
-                  <label for="{{ form.yfcaseCity.id_for_label }}" class="form-label">{{ form.yfcaseCity.label }} <span class="text-danger">*</span></label>
-                  {{ form.yfcaseCity }}
+                  <label for="id_yfcaseCity" class="form-label">縣市 <span class="text-danger">*</span></label>
+                  <select name="yfcaseCity" id="id_yfcaseCity" class="form-select" required>
+                    <option value="">請選擇縣市</option>
+                    {% for city in cities %}
+                      <option value="{{ city.name }}" {% if case and case.yfcaseCity and case.yfcaseCity.name == city.name %}selected{% endif %}>{{ city.name }}</option>
+                    {% endfor %}
+                  </select>
                   {% if form.yfcaseCity.errors %}
                     <div class="text-danger">{{ form.yfcaseCity.errors }}</div>
                   {% endif %}
@@ -66,8 +72,17 @@
               </div>
               <div class="col-md-3">
                 <div class="mb-3">
-                  <label for="{{ form.yfcaseTownship.id_for_label }}" class="form-label">{{ form.yfcaseTownship.label }} <span class="text-danger">*</span></label>
-                  {{ form.yfcaseTownship }}
+                  <label for="id_yfcaseTownship" class="form-label">鄉鎮區里 <span class="text-danger">*</span></label>
+                  <select name="yfcaseTownship" id="id_yfcaseTownship" class="form-select" required>
+                    <option value="">請選擇鄉鎮</option>
+                    {% if case and case.yfcaseTownship %}
+                      <option value="{{ case.yfcaseTownship.name }}" selected>{{ case.yfcaseTownship.name }}</option>
+                    {% endif %}
+                  </select>
+                  <!-- 隱藏的初始值，供JavaScript使用 -->
+                  {% if case and case.yfcaseTownship %}
+                    <input type="hidden" id="initial_township" value="{{ case.yfcaseTownship.name }}">
+                  {% endif %}
                   {% if form.yfcaseTownship.errors %}
                     <div class="text-danger">{{ form.yfcaseTownship.errors }}</div>
                   {% endif %}
@@ -183,25 +198,9 @@
 {% endblock %}
 
 {% block extra_js %}
+  <script src="{% static 'js/cityTownship.js' %}"></script>
   <script>
     $(document).ready(function () {
-      // 縣市變更時更新鄉鎮區里選項
-      $('#id_yfcaseCity').change(function () {
-        var cityId = $(this).val()
-        var townshipSelect = $('#id_yfcaseTownship')
-    
-        townshipSelect.empty()
-        townshipSelect.append('<option value="">---------</option>')
-    
-        if (cityId) {
-          $.get('{% url "cases:get_townships" %}', { city_id: cityId }, function (data) {
-            $.each(data, function (index, township) {
-              townshipSelect.append('<option value="' + township.id + '">' + township.name + '</option>')
-            })
-          })
-        }
-      })
-    
       // 美化表單提交
       $('form').submit(function () {
         var submitBtn = $('button[type="submit"]')
@@ -240,6 +239,19 @@
           }
         })
       })
+      
+      // 手動初始化縣市鄉鎮選擇器，並傳遞正確的API URL
+      if (document.getElementById('id_yfcaseCity') && document.getElementById('id_yfcaseTownship')) {
+        window.caseCityTownshipSelector = new CityTownshipSelector(
+          'id_yfcaseCity',
+          'id_yfcaseTownship',
+          {
+            cityPlaceholder: '請選擇縣市',
+            townshipPlaceholder: '請選擇鄉鎮',
+            apiUrl: '{% url "cases:get_townships" %}'
+          }
+        );
+      }
     })
   </script>
 {% endblock %}

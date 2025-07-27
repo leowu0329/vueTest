@@ -23,19 +23,17 @@ class YfCaseForm(forms.ModelForm):
         ],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    
+
     class Meta:
         model = YfCase
         fields = [
-            'yfcaseCaseNumber', 'yfcaseCompany', 'yfcaseCity', 'yfcaseTownship',
+            'yfcaseCaseNumber', 'yfcaseCompany', 
             'yfcaseBigSection', 'yfcaseSmallSection', 'yfcaseVillage', 'yfcaseNeighbor',
             'yfcaseStreet', 'yfcaseSection', 'yfcaseLane', 'yfcaseAlley',
             'yfcaseNumber', 'yfcaseFloor', 'yfcaseCaseStatus'
         ]
         widgets = {
             'yfcaseCaseNumber': forms.TextInput(attrs={'class': 'form-control', 'required': 'required'}),
-            'yfcaseCity': forms.Select(attrs={'class': 'form-control', 'required': 'required'}),
-            'yfcaseTownship': forms.Select(attrs={'class': 'form-control', 'required': 'required'}),
             'yfcaseBigSection': forms.TextInput(attrs={'class': 'form-control'}),
             'yfcaseSmallSection': forms.TextInput(attrs={'class': 'form-control'}),
             'yfcaseVillage': forms.TextInput(attrs={'class': 'form-control'}),

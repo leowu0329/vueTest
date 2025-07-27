@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import ProfileForm
+from cases.models import City
 
 # Create your views here.
 
@@ -27,7 +28,11 @@ def profile_edit(request):
     else:
         form = ProfileForm(instance=request.user)
     
+    # 取得所有縣市資料供下拉選單使用
+    cities = City.objects.all().order_by('name')
+    
     return render(request, 'account/profile.html', {
         'form': form,
-        'title': '修改個人資料'
+        'title': '修改個人資料',
+        'cities': cities
     })

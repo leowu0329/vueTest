@@ -17,7 +17,7 @@
           <div class="alert alert-warning">
             <strong>案號：</strong>{{ case.yfcaseCaseNumber }}<br />
             <strong>地址：</strong>{{ case.get_full_address|default:'地址未設定' }}<br />
-            <strong>負責人：</strong>{{ case.user.get_full_name|default:case.user.email }}
+            <strong>負責人：</strong>{{ case.user.userFullName|default:case.user.email }}
           </div>
 
           <p class="text-danger">

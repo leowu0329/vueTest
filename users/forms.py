@@ -37,21 +37,9 @@ class ProfileForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
-    userCountry = forms.ModelChoiceField(
-        label=u'縣市',
-        required=False,
-        queryset=City.objects.all(),
-        empty_label='請選擇縣市',
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
 
-    userTownship = forms.ModelChoiceField(
-        label=u'鄉鎮',
-        required=False,
-        queryset=Township.objects.all(),
-        empty_label='請選擇鄉鎮',
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
+
+
 
     class Meta:
         model = User

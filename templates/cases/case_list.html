@@ -40,25 +40,32 @@
                   <a href="?{% if request.GET.search %}
                       
                       
+                      
                       &search={{ request.GET.search }}
                     {% endif %}{% if request.GET.status %}
+                      
                       
                       
                       &status={{ request.GET.status }}
                     {% endif %}{% if request.GET.city %}
                       
                       
+                      
                       &city={{ request.GET.city }}
                     {% endif %}{% if request.GET.sort_by == 'yfcaseCaseNumber' %}
+                      
                       
                       
                       &sort_by=-yfcaseCaseNumber
 
 
+
                     {% else %}
                       
                       
+                      
                       &sort_by=yfcaseCaseNumber
+
 
 
                     {% endif %}"
@@ -66,32 +73,42 @@
                     title="{% if request.GET.sort_by == 'yfcaseCaseNumber' %}
                       
                       
+                      
                       案號降序
+
 
 
                     {% else %}
                       
                       
+                      
                       案號升序
+
 
 
                     {% endif %}">
                     <i class="fas fa-sort{% if request.GET.sort_by == 'yfcaseCaseNumber' %}
                         
                         
+                        
                         -up
+
 
 
                       {% elif request.GET.sort_by == '-yfcaseCaseNumber' %}
                         
                         
+                        
                         -down
+
 
 
                       {% else %}
                         
                         
+                        
                         -down
+
 
 
                       {% endif %}">
@@ -130,7 +147,7 @@
                       <br /><small class="text-muted">地址未設定</small>
                     {% endif %}
                   </td>
-                  <td>{{ case.user.get_full_name|default:case.user.email }}</td>
+                  <td>{{ case.user.userFullName|default:case.user.email }}</td>
                   <td>
                     <div class="btn-group btn-group-sm" role="group">
                       {% if case.user == user or user.is_staff %}
@@ -158,8 +175,10 @@
                       
                       
                       
+                      
                       &search={{ request.GET.search }}
                     {% endif %}{% if request.GET.status %}
+                      
                       
                       
                       
@@ -172,8 +191,10 @@
                       
                       
                       
+                      
                       &city={{ request.GET.city }}
                     {% endif %}{% if request.GET.sort_by %}
+                      
                       
                       
                       
@@ -192,8 +213,10 @@
                       
                       
                       
+                      
                       &search={{ request.GET.search }}
                     {% endif %}{% if request.GET.status %}
+                      
                       
                       
                       
@@ -206,8 +229,10 @@
                       
                       
                       
+                      
                       &city={{ request.GET.city }}
                     {% endif %}{% if request.GET.sort_by %}
+                      
                       
                       
                       
@@ -234,8 +259,10 @@
                         
                         
                         
+                        
                         &search={{ request.GET.search }}
                       {% endif %}{% if request.GET.status %}
+                        
                         
                         
                         
@@ -248,8 +275,10 @@
                         
                         
                         
+                        
                         &city={{ request.GET.city }}
                       {% endif %}{% if request.GET.sort_by %}
+                        
                         
                         
                         
@@ -272,8 +301,10 @@
                       
                       
                       
+                      
                       &search={{ request.GET.search }}
                     {% endif %}{% if request.GET.status %}
+                      
                       
                       
                       
@@ -286,8 +317,10 @@
                       
                       
                       
+                      
                       &city={{ request.GET.city }}
                     {% endif %}{% if request.GET.sort_by %}
+                      
                       
                       
                       
@@ -306,8 +339,10 @@
                       
                       
                       
+                      
                       &search={{ request.GET.search }}
                     {% endif %}{% if request.GET.status %}
+                      
                       
                       
                       
@@ -320,8 +355,10 @@
                       
                       
                       
+                      
                       &city={{ request.GET.city }}
                     {% endif %}{% if request.GET.sort_by %}
+                      
                       
                       
                       
