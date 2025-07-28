@@ -3,126 +3,139 @@
  * 適用於案件表單和個人資料表單
  */
 
-class CityTownshipSelector {
-  constructor(citySelectId, townshipSelectId, options = {}) {
-    this.citySelect = document.getElementById(citySelectId);
-    this.townshipSelect = document.getElementById(townshipSelectId);
-    this.options = {
-      cityPlaceholder: '請選擇縣市',
-      townshipPlaceholder: '請選擇鄉鎮',
-      apiUrl: options.apiUrl || '/api/townships/',
-      ...options,
-    };
-
-    // 儲存初始的鄉鎮值
-    this.initialTownshipName = this.townshipSelect.value;
-
-    // 如果有隱藏的初始鄉鎮值，使用它
-    const hiddenTownship = document.getElementById('initial_township');
-    if (hiddenTownship) {
-      this.initialTownshipName = hiddenTownship.value;
-    }
-
-    // 如果是個人資料表單，檢查是否有隱藏的初始鄉鎮值
-    const hiddenUserTownship = document.getElementById('initial_user_township');
-    if (hiddenUserTownship) {
-      this.initialTownshipName = hiddenUserTownship.value;
-    }
-
-    this.init();
+// 使用立即執行函數來避免全域變數污染
+(function () {
+  // 避免重複宣告
+  if (typeof window.CityTownshipSelector !== 'undefined') {
+    return;
   }
 
-  init() {
-    if (!this.citySelect || !this.townshipSelect) {
-      console.error('CityTownshipSelector: 找不到指定的select元素');
-      return;
+  class CityTownshipSelector {
+    constructor(citySelectId, townshipSelectId, options = {}) {
+      this.citySelect = document.getElementById(citySelectId);
+      this.townshipSelect = document.getElementById(townshipSelectId);
+      this.options = {
+        cityPlaceholder: '請選擇縣市',
+        townshipPlaceholder: '請選擇鄉鎮',
+        apiUrl: options.apiUrl || '/api/townships/',
+        ...options,
+      };
+
+      // 儲存初始的鄉鎮值
+      this.initialTownshipName = this.townshipSelect.value;
+
+      // 如果有隱藏的初始鄉鎮值，使用它
+      const hiddenTownship = document.getElementById('initial_township');
+      if (hiddenTownship) {
+        this.initialTownshipName = hiddenTownship.value;
+      }
+
+      // 如果是個人資料表單，檢查是否有隱藏的初始鄉鎮值
+      const hiddenUserTownship = document.getElementById(
+        'initial_user_township',
+      );
+      if (hiddenUserTownship) {
+        this.initialTownshipName = hiddenUserTownship.value;
+      }
+
+      this.init();
     }
 
-    // 綁定縣市變更事件
-    this.citySelect.addEventListener('change', () => {
-      this.updateTownships();
-    });
+    init() {
+      if (!this.citySelect || !this.townshipSelect) {
+        console.error('CityTownshipSelector: 找不到指定的select元素');
+        return;
+      }
 
-    // 初始化鄉鎮選項
-    this.updateTownships();
-  }
-
-  updateTownships() {
-    const cityName = this.citySelect.value;
-
-    // 清空鄉鎮選項
-    this.townshipSelect.innerHTML = '';
-    this.townshipSelect.appendChild(
-      this.createOption('', this.options.townshipPlaceholder),
-    );
-
-    if (!cityName) {
-      return;
-    }
-
-    // 發送AJAX請求獲取鄉鎮資料
-    fetch(`${this.options.apiUrl}?city_id=${encodeURIComponent(cityName)}`)
-      .then((response) => response.json())
-      .then((data) => {
-        data.forEach((township) => {
-          const option = this.createOption(township.id, township.name);
-          this.townshipSelect.appendChild(option);
-        });
-
-        // 如果有初始鄉鎮值，嘗試設定它
-        if (this.initialTownshipName) {
-          this.townshipSelect.value = this.initialTownshipName;
-        }
-      })
-      .catch((error) => {
-        console.error('獲取鄉鎮資料失敗:', error);
+      // 綁定縣市變更事件
+      this.citySelect.addEventListener('change', () => {
+        this.updateTownships();
       });
-  }
 
-  createOption(value, text) {
-    const option = document.createElement('option');
-    option.value = value;
-    option.textContent = text;
-    return option;
-  }
-
-  // 設定初始值
-  setInitialValues(cityName, townshipName) {
-    if (cityName) {
-      this.citySelect.value = cityName;
+      // 初始化鄉鎮選項
       this.updateTownships();
+    }
 
-      // 等待鄉鎮選項載入完成後設定鄉鎮值
-      setTimeout(() => {
-        if (townshipName) {
-          this.townshipSelect.value = townshipName;
-        }
-      }, 200);
+    updateTownships() {
+      const cityName = this.citySelect.value;
+
+      // 清空鄉鎮選項
+      this.townshipSelect.innerHTML = '';
+      this.townshipSelect.appendChild(
+        this.createOption('', this.options.townshipPlaceholder),
+      );
+
+      if (!cityName) {
+        return;
+      }
+
+      // 發送AJAX請求獲取鄉鎮資料
+      fetch(`${this.options.apiUrl}?city_id=${encodeURIComponent(cityName)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((township) => {
+            const option = this.createOption(township.id, township.name);
+            this.townshipSelect.appendChild(option);
+          });
+
+          // 如果有初始鄉鎮值，嘗試設定它
+          if (this.initialTownshipName) {
+            this.townshipSelect.value = this.initialTownshipName;
+          }
+        })
+        .catch((error) => {
+          console.error('獲取鄉鎮資料失敗:', error);
+        });
+    }
+
+    createOption(value, text) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = text;
+      return option;
+    }
+
+    // 設定初始值
+    setInitialValues(cityName, townshipName) {
+      if (cityName) {
+        this.citySelect.value = cityName;
+        this.updateTownships();
+
+        // 等待鄉鎮選項載入完成後設定鄉鎮值
+        setTimeout(() => {
+          if (townshipName) {
+            this.townshipSelect.value = townshipName;
+          }
+        }, 200);
+      }
+    }
+
+    // 獲取選中的值
+    getSelectedValues() {
+      return {
+        cityName: this.citySelect.value,
+        cityDisplayName:
+          this.citySelect.options[this.citySelect.selectedIndex]?.text || '',
+        townshipName: this.townshipSelect.value,
+        townshipDisplayName:
+          this.townshipSelect.options[this.townshipSelect.selectedIndex]
+            ?.text || '',
+      };
+    }
+
+    // 清空選擇
+    clear() {
+      this.citySelect.value = '';
+      this.townshipSelect.innerHTML = '';
+      this.townshipSelect.appendChild(
+        this.createOption('', this.options.townshipPlaceholder),
+      );
     }
   }
 
-  // 獲取選中的值
-  getSelectedValues() {
-    return {
-      cityName: this.citySelect.value,
-      cityDisplayName:
-        this.citySelect.options[this.citySelect.selectedIndex]?.text || '',
-      townshipName: this.townshipSelect.value,
-      townshipDisplayName:
-        this.townshipSelect.options[this.townshipSelect.selectedIndex]?.text ||
-        '',
-    };
-  }
-
-  // 清空選擇
-  clear() {
-    this.citySelect.value = '';
-    this.townshipSelect.innerHTML = '';
-    this.townshipSelect.appendChild(
-      this.createOption('', this.options.townshipPlaceholder),
-    );
-  }
-}
+  // 將類別暴露到全域
+  window.CityTownshipSelector = CityTownshipSelector;
+})(); // 結束立即執行函數
 
 // 當DOM載入完成後，如果有初始值，設定它們
 document.addEventListener('DOMContentLoaded', function () {

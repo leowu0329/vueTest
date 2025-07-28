@@ -161,13 +161,39 @@ def case_update(request, pk):
             
             case.save()
             messages.success(request, '案件更新成功！')
+            
+            # 如果是 AJAX 請求，返回 JSON 響應
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'message': '案件更新成功！'})
+            
             return redirect('cases:case_detail', pk=case.pk)
+        else:
+            # 表單驗證失敗
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                # 重新渲染表單並返回 HTML
+                cities = City.objects.all().order_by('name')
+                return render(request, 'cases/case_form_modal.html', {
+                    'form': form,
+                    'case': case,
+                    'title': '編輯案件',
+                    'cities': cities
+                })
     else:
         form = YfCaseForm(instance=case)
     
     # 取得所有縣市資料供下拉選單使用
     cities = City.objects.all().order_by('name')
     
+    # 如果是 AJAX 請求，只返回表單 HTML
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return render(request, 'cases/case_form_modal.html', {
+            'form': form,
+            'case': case,
+            'title': '編輯案件',
+            'cities': cities
+        })
+    
+    # 正常請求返回完整頁面
     return render(request, 'cases/case_form.html', {
         'form': form,
         'case': case,

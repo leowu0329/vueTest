@@ -54,12 +54,16 @@ class YfCase(models.Model):
     def get_full_address(self):
         """取得完整地址"""
         address_parts = []
+        # 行政區域
         if self.yfcaseCity:
             address_parts.append(self.yfcaseCity.name)
         if self.yfcaseTownship:
             address_parts.append(self.yfcaseTownship.name)
+        # 詳細地址
         if self.yfcaseStreet:
             address_parts.append(self.yfcaseStreet)
+        if self.yfcaseSection:
+            address_parts.append(f"{self.yfcaseSection}段")
         if self.yfcaseLane:
             address_parts.append(f"{self.yfcaseLane}巷")
         if self.yfcaseAlley:

@@ -1,0 +1,184 @@
+{% load static %}
+
+<form method="post" action="{% url 'cases:case_update' case.pk %}">
+  {% csrf_token %}
+
+  <!-- 基本資訊 -->
+  <h5 class="mb-3">基本資訊</h5>
+
+  <div class="mb-3">
+    <label for="{{ form.yfcaseCaseNumber.id_for_label }}" class="form-label">{{ form.yfcaseCaseNumber.label }} <span class="text-danger">*</span></label>
+    {{ form.yfcaseCaseNumber }}
+    {% if form.yfcaseCaseNumber.errors %}
+      <div class="text-danger">{{ form.yfcaseCaseNumber.errors }}</div>
+    {% endif %}
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseCompany.id_for_label }}" class="form-label">{{ form.yfcaseCompany.label }} <span class="text-danger">*</span></label>
+        {{ form.yfcaseCompany }}
+        {% if form.yfcaseCompany.errors %}
+          <div class="text-danger">{{ form.yfcaseCompany.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseCaseStatus.id_for_label }}" class="form-label">{{ form.yfcaseCaseStatus.label }} <span class="text-danger">*</span></label>
+        {{ form.yfcaseCaseStatus }}
+        {% if form.yfcaseCaseStatus.errors %}
+          <div class="text-danger">{{ form.yfcaseCaseStatus.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- 地址資訊 -->
+  <h5 class="mb-3">地址資訊</h5>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label for="id_yfcaseCity" class="form-label">縣市 <span class="text-danger">*</span></label>
+        <select name="yfcaseCity" id="id_yfcaseCity" class="form-select" required>
+          <option value="">請選擇縣市</option>
+          {% for city in cities %}
+            <option value="{{ city.name }}" {% if case and case.yfcaseCity and case.yfcaseCity.name == city.name %}selected{% endif %}>{{ city.name }}</option>
+          {% endfor %}
+        </select>
+        {% if form.yfcaseCity.errors %}
+          <div class="text-danger">{{ form.yfcaseCity.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label for="id_yfcaseTownship" class="form-label">鄉鎮區里 <span class="text-danger">*</span></label>
+        <select name="yfcaseTownship" id="id_yfcaseTownship" class="form-select" required>
+          <option value="">請選擇鄉鎮</option>
+          {% if case and case.yfcaseTownship %}
+            <option value="{{ case.yfcaseTownship.name }}" selected>{{ case.yfcaseTownship.name }}</option>
+          {% endif %}
+        </select>
+        <!-- 隱藏的初始值，供JavaScript使用 -->
+        {% if case and case.yfcaseTownship %}
+          <input type="hidden" id="initial_township" value="{{ case.yfcaseTownship.name }}">
+        {% endif %}
+        {% if form.yfcaseTownship.errors %}
+          <div class="text-danger">{{ form.yfcaseTownship.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseBigSection.id_for_label }}" class="form-label">{{ form.yfcaseBigSection.label }}</label>
+        {{ form.yfcaseBigSection }}
+        {% if form.yfcaseBigSection.errors %}
+          <div class="text-danger">{{ form.yfcaseBigSection.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseSmallSection.id_for_label }}" class="form-label">{{ form.yfcaseSmallSection.label }}</label>
+        {{ form.yfcaseSmallSection }}
+        {% if form.yfcaseSmallSection.errors %}
+          <div class="text-danger">{{ form.yfcaseSmallSection.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseVillage.id_for_label }}" class="form-label">{{ form.yfcaseVillage.label }}</label>
+        {{ form.yfcaseVillage }}
+        {% if form.yfcaseVillage.errors %}
+          <div class="text-danger">{{ form.yfcaseVillage.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseNeighbor.id_for_label }}" class="form-label">{{ form.yfcaseNeighbor.label }}</label>
+        {{ form.yfcaseNeighbor }}
+        {% if form.yfcaseNeighbor.errors %}
+          <div class="text-danger">{{ form.yfcaseNeighbor.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseStreet.id_for_label }}" class="form-label">{{ form.yfcaseStreet.label }}</label>
+        {{ form.yfcaseStreet }}
+        {% if form.yfcaseStreet.errors %}
+          <div class="text-danger">{{ form.yfcaseStreet.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseSection.id_for_label }}" class="form-label">{{ form.yfcaseSection.label }}</label>
+        {{ form.yfcaseSection }}
+        {% if form.yfcaseSection.errors %}
+          <div class="text-danger">{{ form.yfcaseSection.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseLane.id_for_label }}" class="form-label">{{ form.yfcaseLane.label }}</label>
+        {{ form.yfcaseLane }}
+        {% if form.yfcaseLane.errors %}
+          <div class="text-danger">{{ form.yfcaseLane.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseAlley.id_for_label }}" class="form-label">{{ form.yfcaseAlley.label }}</label>
+        {{ form.yfcaseAlley }}
+        {% if form.yfcaseAlley.errors %}
+          <div class="text-danger">{{ form.yfcaseAlley.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseNumber.id_for_label }}" class="form-label">{{ form.yfcaseNumber.label }}</label>
+        {{ form.yfcaseNumber }}
+        {% if form.yfcaseNumber.errors %}
+          <div class="text-danger">{{ form.yfcaseNumber.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label for="{{ form.yfcaseFloor.id_for_label }}" class="form-label">{{ form.yfcaseFloor.label }}</label>
+        {{ form.yfcaseFloor }}
+        {% if form.yfcaseFloor.errors %}
+          <div class="text-danger">{{ form.yfcaseFloor.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- 按鈕 -->
+  <div class="d-flex justify-content-end gap-2 mt-4">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+    <button type="submit" class="btn btn-primary">儲存</button>
+  </div>
+</form>
+
+<!-- 縣市鄉鎮聯動選擇器將由父頁面初始化 --> 
